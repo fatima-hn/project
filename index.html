@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>لوحة الألوان - ميزة المسح</title>
+    <title>لوحة الألوان - النسخة الكاملة</title>
     <style>
         body { text-align: center; font-family: sans-serif; }
         canvas { border: 2px solid #333; background: #fff; cursor: crosshair; margin-top: 10px; }
@@ -11,11 +11,14 @@
 
     <h2>🎨 لوحة الرسم بالألوان</h2>
     
-    <label>اختر لونك:</label>
+    <label>اللون:</label>
     <input type="color" id="colorPicker" value="#000000">
-    
+
     <button id="eraserBtn">مساحة 🧽</button>
     <button id="drawBtn">قلم ✏️</button>
+
+    <label>الحجم:</label>
+    <input type="range" id="sizeInput" min="1" max="50" value="5">
 
     <br>
     <canvas id="c" width="500" height="400"></canvas>
@@ -26,6 +29,7 @@
         const picker = document.getElementById('colorPicker');
         const eraserBtn = document.getElementById('eraserBtn');
         const drawBtn = document.getElementById('drawBtn');
+        const sizeInput = document.getElementById('sizeInput');
 
         let isEraser = false;
 
@@ -35,10 +39,10 @@
         canvas.onmousemove = function(e) {
             if (e.buttons !== 1) return;
             
-            // إذا وضع المسح نختار أبيض، وإذا قلم نأخذ لون الـ picker
             ctx.fillStyle = isEraser ? "#ffffff" : picker.value;
             
-            ctx.fillRect(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop, 10, 10);
+            let size = sizeInput.value;
+            ctx.fillRect(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop, size, size);
         };
     </script>
 </body>
