@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>لوحة الألوان الكاملة</title>
+    <style>
+        body { text-align: center; font-family: sans-serif; }
+        canvas { border: 2px solid #333; background: #fff; cursor: crosshair; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <h2>🎨 لوحة الرسم بالألوان</h2>
+    
+    <!-- زر اختيار أي لون في العالم -->
+    <label>اختر لونك:</label>
+    <input type="color" id="colorPicker" value="#000000">
+
+    <br>
+    <canvas id="c" width="500" height="400"></canvas>
+
+    <script>
+        const canvas = document.getElementById('c');
+        const ctx = canvas.getContext('2d');
+        const picker = document.getElementById('colorPicker');
+
+        canvas.onmousemove = function(e) {
+            if (e.buttons !== 1) return; // ارسم فقط عند الضغط
+            
+            ctx.fillStyle = picker.value; // يأخذ اللون الذي اخترتيه من الزر
+            
+            // رسم نقطة (مربع صغير 5*5)
+            ctx.fillRect(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop, 5, 5);
+        };
+    </script>
+
+</body>
+</html>
