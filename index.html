@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>لوحة الألوان الكاملة</title>
+    <title>لوحة الألوان - ميزة المسح</title>
     <style>
         body { text-align: center; font-family: sans-serif; }
         canvas { border: 2px solid #333; background: #fff; cursor: crosshair; margin-top: 10px; }
@@ -11,9 +11,11 @@
 
     <h2>🎨 لوحة الرسم بالألوان</h2>
     
-    <!-- زر اختيار أي لون في العالم -->
     <label>اختر لونك:</label>
     <input type="color" id="colorPicker" value="#000000">
+    
+    <button id="eraserBtn">مساحة 🧽</button>
+    <button id="drawBtn">قلم ✏️</button>
 
     <br>
     <canvas id="c" width="500" height="400"></canvas>
@@ -22,16 +24,22 @@
         const canvas = document.getElementById('c');
         const ctx = canvas.getContext('2d');
         const picker = document.getElementById('colorPicker');
+        const eraserBtn = document.getElementById('eraserBtn');
+        const drawBtn = document.getElementById('drawBtn');
+
+        let isEraser = false;
+
+        eraserBtn.onclick = () => isEraser = true;
+        drawBtn.onclick = () => isEraser = false;
 
         canvas.onmousemove = function(e) {
-            if (e.buttons !== 1) return; // ارسم فقط عند الضغط
+            if (e.buttons !== 1) return;
             
-            ctx.fillStyle = picker.value; // يأخذ اللون الذي اخترتيه من الزر
+            // إذا وضع المسح نختار أبيض، وإذا قلم نأخذ لون الـ picker
+            ctx.fillStyle = isEraser ? "#ffffff" : picker.value;
             
-            // رسم نقطة (مربع صغير 5*5)
-            ctx.fillRect(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop, 5, 5);
+            ctx.fillRect(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop, 10, 10);
         };
     </script>
-
 </body>
 </html>
