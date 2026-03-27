@@ -1,48 +1,72 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>لوحة الألوان - النسخة الكاملة</title>
+    <title>لوحة الرسم المتكاملة</title>
     <style>
-        body { text-align: center; font-family: sans-serif; }
-        canvas { border: 2px solid #333; background: #fff; cursor: crosshair; margin-top: 10px; }
+        body { text-align: center; font-family: sans-serif; background: #f9f9f9; }
+        canvas { border: 2px solid #333; background: #fff; cursor: crosshair; margin-top: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .toolbar { margin: 15px; padding: 15px; background: #fff; display: inline-block; border-radius: 10px; border: 1px solid #ddd; }
+        button { cursor: pointer; padding: 8px 12px; margin: 0 5px; border-radius: 5px; border: 1px solid #ccc; background: #eee; }
+        button:hover { background: #ddd; }
     </style>
 </head>
 <body>
 
-    <h2>🎨 لوحة الرسم بالألوان</h2>
+    <h2>🎨 لوحة الرسم الجماعية - النسخة الاحترافية</h2>
     
-    <label>اللون:</label>
-    <input type="color" id="colorPicker" value="#000000">
-
-    <button id="eraserBtn">مساحة 🧽</button>
-    <button id="drawBtn">قلم ✏️</button>
-
-    <label>الحجم:</label>
-    <input type="range" id="sizeInput" min="1" max="50" value="5">
+    <div class="toolbar">
+        <label>اللون:</label>
+        <input type="color" id="picker" value="#000000"><button id="drawBtn">قلم ✏️</button>
+        <button id="eraseBtn">مساحة 🧽</button>
+        
+        <label>الحجم:</label>
+        <input type="range" id="sizeInput" min="1" max="50" value="5">
+        
+        <button id="clearBtn" style="background: #ffcccc;">مسح اللوحة بالكامل 🗑️</button>
+    </div>
 
     <br>
-    <canvas id="c" width="500" height="400"></canvas>
+    <canvas id="c" width="600" height="400"></canvas>
 
     <script>
         const canvas = document.getElementById('c');
         const ctx = canvas.getContext('2d');
-        const picker = document.getElementById('colorPicker');
-        const eraserBtn = document.getElementById('eraserBtn');
-        const drawBtn = document.getElementById('drawBtn');
+        const picker = document.getElementById('picker');
         const sizeInput = document.getElementById('sizeInput');
+        const drawBtn = document.getElementById('drawBtn');
+        const eraseBtn = document.getElementById('eraseBtn');
+        const clearBtn = document.getElementById('clearBtn');
 
+        let color = picker.value;
+        let size = 5;
         let isEraser = false;
 
-        eraserBtn.onclick = () => isEraser = true;
+        // ميزة الرسم والمسح
         drawBtn.onclick = () => isEraser = false;
+        eraseBtn.onclick = () => isEraser = true;
+        // ميزة مسح اللوحة بالكامل (شغل الصديقة الثالثة)
+        clearBtn.onclick = () => {
+            if(confirm("هل أنت متأكد من مسح اللوحة بالكامل؟")) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        };
+
+        // تحديث الحجم واللون
+        sizeInput.oninput = () => size = sizeInput.value;
+        picker.oninput = () => {
+            color = picker.value;
+            isEraser = false;
+        };
 
         canvas.onmousemove = function(e) {
             if (e.buttons !== 1) return;
             
-            ctx.fillStyle = isEraser ? "#ffffff" : picker.value;
+            ctx.fillStyle = isEraser ? "#ffffff" : color;
             
-            let size = sizeInput.value;
-            ctx.fillRect(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop, size, size);
+            let x = e.clientX - canvas.offsetLeft;
+            let y = e.clientY - canvas.offsetTop;
+            
+            ctx.fillRect(x - size/2, y - size/2, size, size);
         };
     </script>
 </body>
